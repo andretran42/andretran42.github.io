@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
+  </head>
+  <body>
+    <div class="header1">
+      <h1 class="header_text">Convert PDF to CSV</h1>
+    </div>
+    <div class="upload">
+      <label class="upload_div_item" for="PDF"
+        ><span>Upload play-by-play PDF: </span></label
+      ><br />
+      <label>Paste PDF Link</label>
+      <input
+        id="input_link"
+        class="upload_div_item"
+        type="url"
+        name="PDF"
+        pattern="https://.*"
+        placeholder="https://example.com"
+      />
+      <label>Enter <strong>OFFENSE</strong> team name</label>
+      <input
+        type="text"
+        id="OFF_TEAM_NAME"
+        class="upload_div_item"
+        placeholder="William & Mary"
+      />
+      <label>Enter <strong>OFFENSE</strong> team abbreviation</label>
+      <input
+        type="text"
+        id="OFF_TEAM_ABBR"
+        class="upload_div_item"
+        placeholder="W&M"
+      />
+      <label>Enter <strong>DEFENSE</strong> team name</label>
+      <input
+        type="text"
+        id="DEF_TEAM_NAME"
+        class="upload_div_item"
+        placeholder="Delaware"
+      />
+      <label>Enter <strong>DEFENSE</strong> team abbreviation</label>
+      <input
+        type="text"
+        id="DEF_TEAM_ABBR"
+        class="upload_div_item"
+        placeholder="DEL"
+      />
+      <button id="submit-btn" class="upload_div_item">Submit</button>
+    </div>
+
+    <script>
+      submit = document.querySelector("#submit-btn");
+      var pdfjsLib = window["pdfjs-dist/build/pdf"];
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "//mozilla.github.io/pdf.js/build/pdf.worker.js";
+      const fileInput = document.getElementById("input");
+      var selectedFile;
+      var typedarray;
+
+      submit.addEventListener("click", () => {
+        selectedFile = document.getElementById("input_link").value;
+        const OFF_TEAM_NAME = document.getElementById("OFF_TEAM_NAME").value;
+        const OFF_TEAM_ABBR = document.getElementById("OFF_TEAM_ABBR").value;
+        const DEF_TEAM_NAME = document.getElementById("DEF_TEAM_NAME").value;
+        const DEF_TEAM_ABBR = document.getElementById("DEF_TEAM_ABBR").value;
+        const loading_task = pdfjsLib.getDocument(selectedFile);
+        loading_task.promise.then(function (pdf) {
+          console.log(selectedFile);
+        });
+      });
+    </script>
+  </body>
+</html>
