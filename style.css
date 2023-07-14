@@ -160,5 +160,11 @@ strong {
 .upload .upload_div_item {
   font-size: 18px;
   text-align: center;
-  margin: 10px;
+  margin: 6px;
+  margin-bottom: 20px;
+}
+
+.upload input {
+  border: 1px solid lightgrey;
+  border-radius: 2px;
 }

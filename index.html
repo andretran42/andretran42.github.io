@@ -76,10 +76,37 @@
         const OFF_TEAM_ABBR = document.getElementById("OFF_TEAM_ABBR").value;
         const DEF_TEAM_NAME = document.getElementById("DEF_TEAM_NAME").value;
         const DEF_TEAM_ABBR = document.getElementById("DEF_TEAM_ABBR").value;
-        const loading_task = pdfjsLib.getDocument(selectedFile);
-        loading_task.promise.then(function (pdf) {
-          console.log(selectedFile);
-        });
+        const pdf = pdfjsLib.getDocument(selectedFile);
+        var text_array = [];
+        function extractText(file) {
+          return file.promise.then(function (pdf) {
+            var maxPage = pdf.numPages;
+            var countPromises = [];
+            for (var curPage = 1; curPage <= maxPage; curPage++) {
+              var page = pdf.getPage(curPage);
+              countPromises.push(
+                page.then(function (page) {
+                  var textContent = page.getTextContent();
+                  return textContent.then(function (text) {
+                    return text.items;
+                  });
+                })
+              );
+            }
+
+            return Promise.all(countPromises).then(function (texts) {
+              console.log(texts);
+            });
+          });
+        }
+        extractText(pdf).then(
+          function (text) {
+            console.log("parse " + text);
+          },
+          function (reason) {
+            console.error(reason);
+          }
+        );
       });
     </script>
   </body>
