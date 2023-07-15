@@ -70,6 +70,20 @@
       var selectedFile;
       var typedarray;
 
+      function substr_index(arr, substring) {
+        my_arr = [];
+        for (const [index, element] of arr.entries()) {
+          if (element.str.includes(substring)) {
+            my_arr.push(index);
+          }
+        }
+        if (my_arr.length > 0) {
+          return my_arr;
+        } else if (my_arr.length == 0) {
+          return [999];
+        }
+      }
+
       submit.addEventListener("click", () => {
         selectedFile = document.getElementById("input_link").value;
         const OFF_TEAM_NAME = document.getElementById("OFF_TEAM_NAME").value;
@@ -95,13 +109,61 @@
             }
 
             return Promise.all(countPromises).then(function (texts) {
-              console.log(texts);
+              return texts;
             });
           });
         }
         extractText(pdf).then(
           function (text) {
-            console.log("parse " + text);
+            text = text.flat();
+
+            let play_by_play = text.slice(
+              substr_index(text, "Play By Play")[0]
+            );
+            let len_play = play_by_play.length;
+            let q = "1";
+            const row_arr = [
+              [
+                "Quarter",
+                "Series",
+                "Play",
+                "Down",
+                "Distance",
+                "Ydline",
+                "Gain",
+              ],
+            ];
+            play_by_play.forEach((element, index) => {
+              play_by_play[index] = play_by_play[index].str;
+            });
+            play_by_play.forEach((element, index) => {
+              if (element.includes(OFF_TEAM_NAME + " at")) {
+                play_by_play[index] = "DELIMIT " + OFF_TEAM_ABBR;
+              } else if (element.includes(DEF_TEAM_NAME + " at")) {
+                play_by_play[index] = "DELIMIT " + DEF_TEAM_ABBR;
+              } else if (element.includes("punt")) {
+                play_by_play[index] = "PUNT";
+              } else if (element.includes("attempt")) {
+                play_by_play[index] = "ATTEMPT";
+              } else if (element.includes("kickoff")) {
+                play_by_play[index] = "KICKOFF";
+              } else if (element.includes("incomplete")) {
+                play_by_play[index] = play_by_play[index].replace(
+                  "incomplete",
+                  "0 yards"
+                );
+              } else if (element.includes("Start of Quarter #2")) {
+                play_by_play[index] = "DELIMIT 2";
+              } else if (element.includes("Start of Quarter #4")) {
+                play_by_play[index] = "DELIMIT 4";
+              } else if (
+                element.includes("Start of Quarter #3") ||
+                element.includes("End of")
+              ) {
+                play_by_play[index] = "DELIMIT 3";
+              }
+            });
+            console.log(play_by_play);
           },
           function (reason) {
             console.error(reason);
