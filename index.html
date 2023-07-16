@@ -73,13 +73,19 @@
       function substr_index(arr, substring) {
         my_arr = [];
         for (const [index, element] of arr.entries()) {
-          if (element.str.includes(substring)) {
-            my_arr.push(index);
+          if (typeof element === "string") {
+            if (element.includes(substring)) {
+              my_arr.push(index);
+            }
+          } else {
+            if (element.str.includes(substring)) {
+              my_arr.push(index);
+            }
           }
         }
         if (my_arr.length > 0) {
           return my_arr;
-        } else if (my_arr.length == 0) {
+        } else {
           return [999];
         }
       }
@@ -122,20 +128,25 @@
             );
             let len_play = play_by_play.length;
             let q = "1";
-            const row_arr = [
-              [
-                "Quarter",
-                "Series",
-                "Play",
-                "Down",
-                "Distance",
-                "Ydline",
-                "Gain",
-              ],
-            ];
+            var csv = "Quarter,Series,Play,Down,Distance,Ydline,Gain\n";
             play_by_play.forEach((element, index) => {
               play_by_play[index] = play_by_play[index].str;
             });
+            var pbp_len = play_by_play.length;
+            for (var i = 0; i < pbp_len; i++) {
+              if (play_by_play[i] === " ") {
+                play_by_play[i] =
+                  play_by_play[i - 1] + " " + play_by_play[i + 1];
+                play_by_play = play_by_play
+                  .slice(0, i - 1)
+                  .concat(play_by_play.slice(i));
+                play_by_play = play_by_play
+                  .slice(0, i)
+                  .concat(play_by_play.slice(i + 1));
+                i -= 2;
+                pbp_len -= 2;
+              }
+            }
             play_by_play.forEach((element, index) => {
               if (element.includes(OFF_TEAM_NAME + " at")) {
                 play_by_play[index] = "DELIMIT " + OFF_TEAM_ABBR;
@@ -163,7 +174,98 @@
                 play_by_play[index] = "DELIMIT 3";
               }
             });
+
+            var series = 0;
+            var playNum = 0;
+            include = true;
             console.log(play_by_play);
+            play_by_play.forEach((element, index) => {
+              if (element.includes("DELIMIT " + OFF_TEAM_ABBR)) {
+                playNum = 0;
+                series += 1;
+              }
+              sign = "";
+              offsign = "";
+              if (element.includes("DELIMIT " + DEF_TEAM_ABBR)) {
+                playNum = 0;
+              }
+              if (element.includes("loss")) {
+                sign = "-";
+              }
+              if (element.slice(13, 20).includes(OFF_TEAM_ABBR)) {
+                offsign = "-";
+              }
+              if (index >= 4 && play_by_play[index - 4].includes("DELIMIT")) {
+                play_by_play[index] = play_by_play[index].replace("1st", "0th");
+              }
+              if (element.slice(0, 9).includes("and")) {
+                element = element.replace("and", "");
+                element = element.replace("at", "");
+                yards = substr_index(element.split(/\s+/), "yard");
+                if (include) {
+                  if (
+                    element.includes("PENALTY") ||
+                    element.includes("intercept")
+                  ) {
+                    playNum += 1;
+                    var ydstogo = element.split(/\s+/)[2];
+                    if (ydstogo.includes(OFF_TEAM_ABBR)) {
+                      ydstogo = ydstogo.replace(OFF_TEAM_ABBR, "");
+                    } else if (ydstogo.includes(DEF_TEAM_ABBR)) {
+                      ydstogo = ydstogo.replace(DEF_TEAM_ABBR, "");
+                    }
+                    csv_add_row = [
+                      q,
+                      series,
+                      playNum,
+                      play_by_play[index][0],
+                      element.split(/\s+/)[1],
+                      offsign + ydstogo,
+                      "",
+                    ];
+                    csv += csv_add_row.join(",");
+                    csv += "\n";
+                  } else if (yards[0] != 999) {
+                    playNum += 1;
+                    var ydstogo = element.split(/\s+/)[2];
+                    if (ydstogo.includes(OFF_TEAM_ABBR)) {
+                      ydstogo = ydstogo.replace(OFF_TEAM_ABBR, "");
+                    } else if (ydstogo.includes(DEF_TEAM_ABBR)) {
+                      ydstogo = ydstogo.replace(DEF_TEAM_ABBR, "");
+                    }
+                    csv_add_row = [
+                      q,
+                      series,
+                      playNum,
+                      play_by_play[index][0],
+                      element.split(/\s+/)[1],
+                      offsign + ydstogo,
+                      sign + element.split(/\s+/)[yards[0] - 1],
+                    ];
+                    csv += csv_add_row.join(",");
+                    csv += "\n";
+                  }
+                  console.log(play_by_play[index]);
+                  console.log(yards);
+                }
+              } else if (element.includes("DELIMIT")) {
+                if (element.includes("DELIMIT " + OFF_TEAM_ABBR)) {
+                  include = true;
+                }
+                if (
+                  element.includes("DELIMIT " + DEF_TEAM_ABBR) ||
+                  element.includes("DELIMIT 3")
+                ) {
+                  include = false;
+                }
+                var quar = play_by_play[index].split(/\s+/)[1];
+                var quar_arr = ["2", "3", "4"];
+                if (quar_arr.includes(quar)) {
+                  q = quar;
+                }
+              }
+            });
+            console.log(csv);
           },
           function (reason) {
             console.error(reason);
