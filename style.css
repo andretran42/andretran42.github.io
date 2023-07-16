@@ -137,13 +137,13 @@ strong {
   text-decoration: underline;
 }
 
-.header1 {
+.header {
   display: flex;
   background-color: rgb(121, 205, 242);
   justify-content: center;
 }
 
-.header1 .header_text {
+.header .header_text {
   color: white;
   margin: 30px;
   font-weight: 600;
@@ -155,6 +155,7 @@ strong {
   flex-direction: column;
   align-items: center;
   margin-top: 10px;
+  height: 90vh;
 }
 
 .upload .upload_div_item {
@@ -167,4 +168,42 @@ strong {
 .upload input {
   border: 1px solid lightgrey;
   border-radius: 2px;
+}
+
+.usage_content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.usage_text {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.usage_text_pic_box {
+  display: flex;
+  justify-content: space-around;
+  width: 80vw;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.box_contain {
+  flex: 1 1 0px;
+}
+
+img {
+  height: 300px;
+  border: 7px solid rgb(235, 235, 235);
+  border-radius: 2px;
+}
+
+.footer {
+  display: flex;
+  background-color: rgb(121, 205, 242);
+  justify-content: center;
+  height: 80px;
 }

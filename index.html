@@ -14,7 +14,7 @@
     <script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
   </head>
   <body>
-    <div class="header1">
+    <div class="header">
       <h1 class="header_text">Convert PDF to CSV</h1>
     </div>
     <div class="upload">
@@ -60,7 +60,50 @@
       />
       <button id="submit-btn" class="upload_div_item">Submit</button>
     </div>
-
+    <div class="header">
+      <h1 class="header_text">Usage</h1>
+    </div>
+    <div class="usage_content">
+      <p class="usage_text">
+        This is a web application to convert PDF files of play-by-play data into
+        CSV format.<br />This application can be used for PDF files from most
+        FCS teams, but there may be some teams for which this application will
+        not work.<br />If your PDF looks like
+        <a
+          href="https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/nsuspartans.com/stats/football/2022/pdf/20220924091859-29726%20(1).pdf"
+          target="_blank"
+          >this</a
+        >, the application should work. <br />PDF play-by-play data can be found
+        on most teams' websites under "Football Schedule", then "Box Score",
+        then "Play by Play"
+      </p>
+      <div class="usage_text_pic_box">
+        <div class="box_contain"><img src="/images/FullScreen.png" /></div>
+        <div class="box_contain">
+          Copy the link to the PDF file that pops up when you click the “view
+          full screen” option (or something similar).
+        </div>
+      </div>
+      <div class="usage_text_pic_box">
+        <div class="box_contain">
+          Type exactly (case-sensitive, no surrounding spaces) the team on the
+          OFFENSE side of the ball as shown in the PDF. (It may be easier to
+          copy and paste)
+        </div>
+        <div class="box_contain"><img src="/images/OFF_TEAM_NAME.png" /></div>
+      </div>
+      <div class="usage_text_pic_box">
+        <div class="box_contain"><img src="/images/OFF_TEAM_ABBR.png" /></div>
+        <div class="box_contain">
+          Then type exactly the abbreviation listed on the PDF. (Again, it may
+          be easier to copy and paste)
+        </div>
+      </div>
+      <div class="usage_text_pic_box">
+        Then, do the same for the team on DEFENSE
+      </div>
+    </div>
+    <div class="footer"></div>
     <script>
       submit = document.querySelector("#submit-btn");
       var pdfjsLib = window["pdfjs-dist/build/pdf"];
