@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>PDF to CSV</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/x-icon" href="images/football.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -60,7 +61,7 @@
       />
       <button id="submit-btn" class="upload_div_item">Submit</button>
     </div>
-    <div class="header">
+    <div class="header" id="usage">
       <h1 class="header_text">Usage</h1>
     </div>
     <div class="usage_content">
@@ -103,7 +104,16 @@
         Then, do the same for the team on DEFENSE
       </div>
     </div>
-    <div class="footer"></div>
+    <div class="footer">
+      <div style="font-size: 8px">
+        <a
+          target="_blank"
+          href="https://icons8.com/icon/nVXGpsYrpHNg/american-football"
+          >Football</a
+        >
+        icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+      </div>
+    </div>
     <script>
       submit = document.querySelector("#submit-btn");
       var pdfjsLib = window["pdfjs-dist/build/pdf"];

@@ -206,4 +206,5 @@ img {
   background-color: rgb(121, 205, 242);
   justify-content: center;
   height: 80px;
+  align-items: center;
 }
