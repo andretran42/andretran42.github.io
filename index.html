@@ -90,6 +90,33 @@
         }
       }
 
+      const download = function (data, team1, team2) {
+        // Creating a Blob for having a csv file format
+        // and passing the data with type
+        const blob = new Blob([data], { type: "text/csv" });
+
+        // Creating an object for downloading url
+        const url = window.URL.createObjectURL(blob);
+
+        // Creating an anchor(a) tag of HTML
+        const a = document.createElement("a");
+
+        // Passing the blob downloading url
+        a.setAttribute("href", url);
+
+        // Setting the anchor tag attribute for downloading
+        // and passing the download file name
+        const title = team1 + "vs" + team2;
+        a.setAttribute("download", title + ".csv");
+
+        // Performing a download with click
+        a.click();
+      };
+
+      const get = async function (data, team1, team2) {
+        download(data, team1, team2);
+      };
+
       submit.addEventListener("click", () => {
         selectedFile = document.getElementById("input_link").value;
         const OFF_TEAM_NAME = document.getElementById("OFF_TEAM_NAME").value;
@@ -265,7 +292,7 @@
                 }
               }
             });
-            console.log(csv);
+            get(csv, OFF_TEAM_ABBR, DEF_TEAM_ABBR);
           },
           function (reason) {
             console.error(reason);
