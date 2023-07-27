@@ -208,3 +208,7 @@ img {
   height: 80px;
   align-items: center;
 }
+
+#warning {
+  margin: 20px;
+}
